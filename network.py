@@ -1,15 +1,11 @@
 from collections import OrderedDict
 
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torchvision.transforms as transforms
+from torch import nn
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 
 import pytorch_lightning as pl
-
-import adabound
 
 class FooNetwork(pl.LightningModule):
     def __init__(self, hparams):
@@ -40,7 +36,7 @@ class FooNetwork(pl.LightningModule):
         return x
 
     def loss(self, y, p):
-        loss = torch.nn.CrossEntropyLoss()(p, y)
+        loss = nn.CrossEntropyLoss()(p, y)
         return loss
 
     def training_step(self, data_batch, batch_i):
@@ -100,7 +96,7 @@ class FooNetwork(pl.LightningModule):
     # TRAINING SETUP
     # ---------------------
     def configure_optimizers(self):
-        optimizer = optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
         return optimizer
 
     def __dataloader(self, dataset):
